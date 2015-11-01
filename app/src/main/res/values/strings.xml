@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TicTacToe</string>
+    <string name="newGameSameOpp">New Game (Same Opponent)</string>
+    <string name="newGameDiffOpp">New Game (Different Opponent)</string>
+
+
+</resources>
