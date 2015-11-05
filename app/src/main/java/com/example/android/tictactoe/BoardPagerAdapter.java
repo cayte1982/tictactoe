@@ -12,7 +12,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class BoardPagerAdapter extends FragmentPagerAdapter {
     int NumOfGamesOpen = 10; //??? TODO: where is this number going to come from / where will it be incremented?
     String p1;
-    String p2;
+  //  String p2;
 
     public BoardPagerAdapter(FragmentManager fm, String s1, String s2) {  //why do i need a constructor here?
         super(fm);
@@ -21,7 +21,7 @@ public class BoardPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getCount() { //
         return NumOfGamesOpen;
     }
 
