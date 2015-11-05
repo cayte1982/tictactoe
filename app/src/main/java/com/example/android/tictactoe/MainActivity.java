@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getBaseContext(), "Please Enter Your Name", Toast.LENGTH_LONG).show();
                 } else {
                     Intent mIntent = new Intent(getBaseContext(), GameBoard.class);
-                    mIntent.putExtra(Constants.PLAYER1, player1name); //confused about names / values
+                    mIntent.putExtra(Constants.PLAYER1, player1name);
                     mIntent.putExtra(Constants.PLAYER2, player2name);
                     startActivity(mIntent);
                 }

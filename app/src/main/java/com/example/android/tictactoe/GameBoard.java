@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -24,236 +26,84 @@ import java.util.regex.Pattern;
  * Created by cayte on 10/21/15.
  */
 
-//TODO - add player names to sides
     //TODO - different layout for landscape
     //TODO - save game state?
     //TODO - save screen shots of last 10 games?
 
-public class GameBoard extends FragmentActivity implements NoticeDialogListener{
+public class GameBoard extends FragmentActivity implements GameDialog.NoticeDialogListener,
+        EnterNamesFrag.EnterNamesFragListener, GameBoardFrag.GameBoardFragListener {
 
-    GridLayout myGrid;
-    boolean whoseMove = false; //false for X, true for O
-
+    BoardPagerAdapter mPagerAdapter;
+    ViewPager mViewPager;
     String player1name;
     String player2name;
 
-    TextView player1;
-    TextView player2;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_game_board);
 
-    boolean isWinner = false;
-    String whoWon = "";
-    int count;
+        Intent mIntent = getIntent();
+        player1name = mIntent.getStringExtra(Constants.PLAYER1);
+        player2name = mIntent.getStringExtra(Constants.PLAYER2);
+
+
+        // ViewPager and its adapters use support library fragments, so use getSupportFragmentManager.
+        mPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager(), player1name, player2name); //??? is there a better way to get player names into the frags?
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mPagerAdapter);
+    }
+        //TODO - plays a sound or something
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.gameboard);
+    public void onDialogSameGameClick(String player1name, String player2name){
+        finish();//??? how to destroy the current fragment?
 
-        player1name = getIntent().getExtras().getString(Constants.PLAYER1);
-        player2name = getIntent().getExtras().getString(Constants.PLAYER2);
+        //TODO: this is no longer starting a new activity, but rather creates a new fragment (and adds it to the ViewPager
+       /** Intent mIntent = new Intent(getBaseContext(), GameBoard.class);
+        mIntent.putExtra(Constants.PLAYER1, player2name); //switch player sides
+        mIntent.putExtra(Constants.PLAYER2, player1name);
+        startActivity(mIntent);**/
 
-        player1 = (TextView) findViewById(R.id.player1name);
-        player1.setText(player1name);
-        player2 = (TextView) findViewById(R.id.player2name);
-        player2.setText(player2name);
+        Bundle mBundle = new Bundle();
+        mBundle.putString(Constants.PLAYER1, player2name); //switch player sides
+        mBundle.putString(Constants.PLAYER2, player1name);
 
-
-        myGrid = (GridLayout) findViewById(R.id.myGrid);
-        for (int i = 1; i <= 9; i++) {
-            final SquareButton myBtn = new SquareButton(getBaseContext());  //??? why final?
-            myBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!whoseMove) {
-                        v.setTag("x");
-                    } else {
-                        v.setTag("o");
-                    }
-                    makeMove(myBtn);
-                    checkWin();
-                }
-            });
-            myGrid.addView(myBtn);
-        }
+        GameBoardFrag newGame = new GameBoardFrag();
+        newGame.setArguments(mBundle);
     }
 
-    private void makeMove (SquareButton sqBtn){
-        if (!whoseMove) {
-            sqBtn.setImageResource(R.drawable.x);
-            sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
-            whoseMove = !whoseMove;
-        } else{
-            sqBtn.setImageResource(R.drawable.o);
-            sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
-            whoseMove = !whoseMove;
-        }
-        sqBtn.setEnabled(false);
+    @Override
+    public void onDialogDiffGameClick(){
+        finish();
+        //TODO: destroy fragment and go to EnterNamesFrag
+        //TODO: this is where we include a flag to EnterNamesFrag (new game vs. edit names)
+    }
+
+    @Override
+    public void startNewGameFrag(){
 
     }
 
-    private void checkWin (){
+    @Override
+    public void returnToGameWithEditedNames(){
 
-        String winCheckR = ""; //OK to initialize here?
-        String winCheckC = "";
-        String winCheckD = "";
-        String winCheckAD = "";
-        String wx = "xxx";
-        String wo = "ooo";
+    };
 
-        for (int i = 0; i<9; i++) { //check rows for win
-            SquareButton btn = (SquareButton) myGrid.getChildAt(i);
-            if (btn.getTag() != null) {
-                String xoro = btn.getTag().toString();
-                Log.v("xoro contains", xoro);
-                winCheckR = winCheckR + xoro;
-            } else {
-                winCheckR = winCheckR + "b";
-                Log.v("xoro contains", "null");
-            }
-        }
-        Log.v("list of positions is: ", winCheckR.toString());
-
-        int i = 0;
-       while (i < 9) { //check columns  //???fugly - is there a better way?
-           Log.v("value of i is", Integer.toString(i));
-           SquareButton btn = (SquareButton) myGrid.getChildAt(i);
-           if (btn.getTag() != null) {
-               String xoro = btn.getTag().toString();
-               Log.v("xoroC contains", xoro);
-               winCheckC = winCheckC + xoro;
-           } else {
-               winCheckC = winCheckC + "b";
-               Log.v("xoroC contains", "null");
-           }
-           i = i + 3;
-           if (i > 8 && i < 11){
-               i = i - 8;
-           }
-       }
-        Log.v("list of Vert pos is: ", winCheckC.toString());
-
-        for (int j = 0; j<9; j = j + 4) { //check Diagonal for win  //??? - why doesn't i=+4 work?
-            SquareButton btn = (SquareButton) myGrid.getChildAt(j);
-            if (btn.getTag() != null) {
-                String xoro = btn.getTag().toString();
-                Log.v("xoro contains", xoro);
-                winCheckD = winCheckD + xoro;
-            } else {
-                winCheckD = winCheckD + "b";
-                Log.v("xoro contains", "null");
-            }
-        }
-        Log.v("list of Diag pos is: ", winCheckD.toString());
-
-
-        for (int j = 2; j<7; j = j + 2) { //check antiDiagonal for win
-            SquareButton btn = (SquareButton) myGrid.getChildAt(j);
-            if (btn.getTag() != null) {
-                String xoro = btn.getTag().toString();
-                Log.v("xoro contains", xoro);
-                winCheckAD = winCheckAD + xoro;
-            } else {
-                winCheckAD = winCheckAD + "b";
-                Log.v("xoro contains", "null");
-            }
-        }
-        Log.v("list of ADiag pos is: ", winCheckAD.toString());
-
-        winContains(winCheckR, wx, wo);
-        winContains(winCheckC, wx, wo);
-        winContains(winCheckD, wx, wo);
-        winContains(winCheckAD, wx, wo);
-        if (count == 9 && !isWinner) {
-            whoWon = "NO ONE won - It's a draw!";
-            makeDialog(whoWon);
-            isWinner = true;
-        }
-
-    }
-
-    private void winContains(String win, String wx, String wo){
-
-        if (!isWinner) {
-            String winPatternX = "^(.{0}|.{3}|.{6})" + wx;
-            String winPatternO = "^(.{0}|.{3}|.{6})" + wo;
-
-            Pattern rX = Pattern.compile(winPatternX);
-            Pattern rO = Pattern.compile(winPatternO);
-
-            Matcher mX = rX.matcher(win);
-            Matcher mO = rO.matcher(win);
-
-            boolean winX = false;
-            boolean winO = false;
-
-
-
-            if (mX.find()) {
-                winX = true;
-                whoWon = player1name + " won";
-            }
-            if (mO.find()) {
-                winO = true;
-                whoWon = player2name + " won";
-            }
-
-
-
-            count = 0;
-            for (int i = 0; i < 9; i++) {
-                //check if it's a draw
-                SquareButton btn = (SquareButton) myGrid.getChildAt(i);
-                if (!btn.isEnabled()) {
-                    count++;
-                }
-            }
-
-            if (winX || winO) {
-                Toast.makeText(getBaseContext(), whoWon + "won", Toast.LENGTH_LONG).show();
-                Log.v("someone won", "winwin");
-                makeDialog(whoWon);
-                for (int i = 0; i < 9; i++) {
-                    SquareButton btn = (SquareButton) myGrid.getChildAt(i);
-                    btn.setEnabled(false);
-                }
-                isWinner = true;
-            }
-
-        }
-
-        //
-        //TODO -turn toast into dialog
-        // acknowledging starts a new game (players sides reversed)
-        // adds a win to record keeping (kept in the menu??)
-        //TODO - plays a sound or something
-    }
-
-    private void makeDialog(String whoWon){
+    @Override
+    public void makeDialog (String whoWon, String player1name, String player2name){
         //make dialog
         //set arguments to pass info into the dialog
         GameDialog gameEndDialog = new GameDialog();
         Bundle args = new Bundle();
-        args.putString("whoWonThisGame", whoWon);
+        args.putString("whoWonThisGame", whoWon); //TODO: this won't work now, so get info from GameFrag
+        args.putString(Constants.PLAYER1, player1name); //TODO: this won't work now, so get info from GameFrag
+        args.putString(Constants.PLAYER2, player2name); //TODO: this won't work now, so get info from GameFrag
         gameEndDialog.setArguments(args);
 
         gameEndDialog.show(this.getSupportFragmentManager(), "GameOver");
 
     }
-
-    @Override
-    public void onDialogSameGameClick(){
-        finish();
-        Intent mIntent = new Intent(getBaseContext(), GameBoard.class);
-        mIntent.putExtra(Constants.PLAYER1, player2name); //switch player sides
-        mIntent.putExtra(Constants.PLAYER2, player1name);
-        startActivity(mIntent);
-    };
-
-    @Override
-    public void onDialogDiffGameClick(){
-        finish();
-    };
-
 
 
 

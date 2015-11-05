@@ -35,14 +35,14 @@ public class GameDialog extends DialogFragment {
         // because it's used in the OnClick, which is asynchronous, I don't want this to be alterable so it doesn't cause a runtime exception
 
         final AlertDialog.Builder myBuilder = new AlertDialog.Builder(getActivity()); //??? why final
-        //final because it's possible that the activity gets destroyed whole the dialog is being created and the dialog needs the activity's context
+        //final because it's possible that the activity gets destroyed while the dialog is being created and the dialog needs the activity's context
         // so by declaring the builder final, it locks in the activity context.
 
         //myBuilder.setTitle("Please Choose What To Do Next");
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        //getting arguments that were set in gameboard.java when creating the dialog
+        //getting arguments that were set in game_board_frag.java when creating the dialog
         Bundle args = getArguments();
         String whoWon = args.getString("whoWonThisGame");
 
@@ -50,13 +50,16 @@ public class GameDialog extends DialogFragment {
         TextView winner = (TextView) myView.findViewById(R.id.whoWonText);
         winner.setText(whoWon);
 
+        final String player1name = getArguments().getString(Constants.PLAYER1);
+        final String player2name = getArguments().getString(Constants.PLAYER2);
+
         //creating buttons in xml because it follows the MVC pattern.
         Button sameOpp = (Button) myView.findViewById(R.id.newGameSameOpp);
         sameOpp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 d.dismiss();
-                mListener.onDialogSameGameClick();
+                mListener.onDialogSameGameClick(player1name, player2name);
             }
         });
 
@@ -98,6 +101,12 @@ public class GameDialog extends DialogFragment {
             throw new ClassCastException(activity.toString()
                     + " must implement NoticeDialogListener");
         }
+    }
+
+    public interface NoticeDialogListener {
+
+        void onDialogSameGameClick(String s1, String s2);
+        void onDialogDiffGameClick();
     }
 
 }
