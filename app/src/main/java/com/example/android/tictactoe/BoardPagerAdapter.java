@@ -32,16 +32,16 @@ public class BoardPagerAdapter extends FragmentPagerAdapter {
 
     public void addGame(String gamename, String n1, String n2) {
         GameBoardFragment gf = GameBoardFragment.newInstance(n1,n2);
-        mFm.beginTransaction().add(gf,gamename).commit();
+        //mFm.beginTransaction().add(gf,gamename).commit();
         mGames.add(gf);
         notifyDataSetChanged();
     }
 
     public void deleteGame(String gamename) {
         Fragment f = mFm.findFragmentByTag(gamename);
-        mFm.beginTransaction().remove(f).commit();
+        //mFm.beginTransaction().remove(f).commit();
         mGames.remove(f);
-        notifyDataSetChanged();
+       notifyDataSetChanged();
     }
 
 
