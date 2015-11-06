@@ -1,26 +1,14 @@
 package com.example.android.tictactoe;
 
-import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 
 
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.GridLayout;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by cayte on 10/21/15.
@@ -30,10 +18,10 @@ import java.util.regex.Pattern;
     //TODO - save game state?
     //TODO - save screen shots of last 10 games?
 
-public class GameBoard extends FragmentActivity implements GameDialog.NoticeDialogListener,
-        EnterNamesFrag.EnterNamesFragListener, GameBoardFrag.GameBoardFragListener,
+public class GameBoardActivity extends FragmentActivity implements GameDialog.NoticeDialogListener,
+        EnterNamesFrag.EnterNamesFragListener, GameBoardFragment.GameBoardFragListener,
         EditStartButtonFrag.EditStartButtonFragListener{
-
+    FloatingActionButton mFab;
     BoardPagerAdapter mPagerAdapter;
     ViewPager mViewPager;
     String player1name;
@@ -41,6 +29,7 @@ public class GameBoard extends FragmentActivity implements GameDialog.NoticeDial
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_game_board);
 
         Intent mIntent = getIntent();
@@ -49,9 +38,17 @@ public class GameBoard extends FragmentActivity implements GameDialog.NoticeDial
 
         //??? TODO - how do I add the editstart frag to this layout???
         // ViewPager and its adapters use support library fragments, so use getSupportFragmentManager.
-        mPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager(), player1name, player2name); //??? is there a better way to get player names into the frags?
+        mPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager()); //??? is there a better way to get player names into the frags?
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
+        mFab = (FloatingActionButton) findViewById(R.id.newgame);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPagerAdapter.addGame("test",player1name,player2name);
+                mPagerAdapter.notifyDataSetChanged();
+            }
+        });
     }
         //TODO - plays a sound or something
 
@@ -61,7 +58,7 @@ public class GameBoard extends FragmentActivity implements GameDialog.NoticeDial
         finish();//??? how to destroy the current fragment?
 
         //TODO: this is no longer starting a new activity, but rather creates a new fragment (and adds it to the ViewPager
-       /** Intent mIntent = new Intent(getBaseContext(), GameBoard.class);
+       /** Intent mIntent = new Intent(getBaseContext(), GameBoardActivity.class);
         mIntent.putExtra(Constants.PLAYER1, player2name); //switch player sides
         mIntent.putExtra(Constants.PLAYER2, player1name);
         startActivity(mIntent);**/
@@ -70,7 +67,7 @@ public class GameBoard extends FragmentActivity implements GameDialog.NoticeDial
         mBundle.putString(Constants.PLAYER1, player2name); //switch player sides
         mBundle.putString(Constants.PLAYER2, player1name);
 
-        GameBoardFrag newGame = new GameBoardFrag();
+        GameBoardFragment newGame = new GameBoardFragment();
         newGame.setArguments(mBundle);
     }
 

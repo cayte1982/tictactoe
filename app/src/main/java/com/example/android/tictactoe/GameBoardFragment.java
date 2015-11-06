@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 /**
  * Created by cayte on 11/3/15.
  */
-public class GameBoardFrag extends Fragment {
+public class GameBoardFragment extends Fragment {
     GridLayout myGrid;
     boolean whoseMove = false; //false for X, true for O
 
@@ -32,19 +32,22 @@ public class GameBoardFrag extends Fragment {
     String whoWon = "";
     int count;
 
-    static GameBoardFrag newInstance(int position, String p1, String p2) {     //???why static (tutorial said so, but can't set player names that way)? and in general???
-        GameBoardFrag f = new GameBoardFrag();
+    static GameBoardFragment newInstance(String p1, String p2) {     //???why static (tutorial said so, but can't set player names that way)? and in general???
+        GameBoardFragment f = new GameBoardFragment();
 
         // Supply num input as an argument.
 
         //???why am i doing this exactly? - so i can get the data in the OnCreateView
         Bundle args = new Bundle();
-        args.putInt("position", position);
         args.putString(Constants.PLAYER1, p1);
         args.putString(Constants.PLAYER2, p2);
         f.setArguments(args);
 
         return f;
+    }
+
+    public void updateName(String name1, String name2) {
+        //TODO:- assign and update the name.
     }
 
     @Override
@@ -96,6 +99,9 @@ public class GameBoardFrag extends Fragment {
         sqBtn.setEnabled(false);
     }
 
+    /*
+    TODO:- put this into utils
+     */
     private void checkWin (){
         String winCheckR = "";
         String winCheckC = "";
@@ -196,7 +202,7 @@ public class GameBoardFrag extends Fragment {
             if (winX || winO) {
                 Toast.makeText(getActivity(), whoWon + "won", Toast.LENGTH_LONG).show(); //TODO: don't forget to get rid of this
                 Log.v("someone won", "winwin");
-                mListener.makeDialog(whoWon, player1name, player2name); //communicates to the GameBoard Activity (tells it who won and has it make the dialog
+                mListener.makeDialog(whoWon, player1name, player2name); //communicates to the GameBoardActivity Activity (tells it who won and has it make the dialog
                 for (int i = 0; i < 9; i++) {
                     SquareButton btn = (SquareButton) myGrid.getChildAt(i);
                     btn.setEnabled(false);

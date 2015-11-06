@@ -1,6 +1,7 @@
 package com.example.android.tictactoe;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +13,9 @@ import android.widget.Toast;
 
 /**
  * Created by cayte on 11/5/15.
+ * TODO : -This is useless. Make this a part of the GameBoardFragment
  */
+@Deprecated
 public class EditStartButtonFrag extends Fragment{
 
     Button startGameBtn;
@@ -50,12 +53,12 @@ public class EditStartButtonFrag extends Fragment{
     EditStartButtonFragListener mListener;
 
     @Override
-    public void onAttach(Activity activity) {   //http://developer.android.com/training/basics/fragments/communicating.html
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (EditStartButtonFragListener) activity; //??? not sure i understand this
+            mListener = (EditStartButtonFragListener) context; //??? not sure i understand this
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement EnterNamesFragListener");
         }
     }
