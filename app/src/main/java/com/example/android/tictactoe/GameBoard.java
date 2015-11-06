@@ -31,7 +31,8 @@ import java.util.regex.Pattern;
     //TODO - save screen shots of last 10 games?
 
 public class GameBoard extends FragmentActivity implements GameDialog.NoticeDialogListener,
-        EnterNamesFrag.EnterNamesFragListener, GameBoardFrag.GameBoardFragListener {
+        EnterNamesFrag.EnterNamesFragListener, GameBoardFrag.GameBoardFragListener,
+        EditStartButtonFrag.EditStartButtonFragListener{
 
     BoardPagerAdapter mPagerAdapter;
     ViewPager mViewPager;
@@ -46,7 +47,7 @@ public class GameBoard extends FragmentActivity implements GameDialog.NoticeDial
         player1name = mIntent.getStringExtra(Constants.PLAYER1);
         player2name = mIntent.getStringExtra(Constants.PLAYER2);
 
-
+        //??? TODO - how do I add the editstart frag to this layout???
         // ViewPager and its adapters use support library fragments, so use getSupportFragmentManager.
         mPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager(), player1name, player2name); //??? is there a better way to get player names into the frags?
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -105,6 +106,16 @@ public class GameBoard extends FragmentActivity implements GameDialog.NoticeDial
 
     }
 
+    @Override
+    public void startNewGame(){
+        //start new game from within an ongoing game
+
+    };
+
+    @Override
+    public void editNames(){
+
+    };
 
 
 
