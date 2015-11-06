@@ -46,7 +46,6 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
             @Override
             public void onClick(View v) {
                 mPagerAdapter.addGame("test",player1name,player2name);
-                mPagerAdapter.notifyDataSetChanged();
             }
         });
     }
