@@ -37,7 +37,7 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
         if (!mGames.contains(item)) {
             return POSITION_NONE;
         }
-        return POSITION_UNCHANGED;
+        return mGames.indexOf(item);
     }
 
     @Override
@@ -48,7 +48,9 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
     public void addGame(String n1, String n2) {
         if (mGames.size() <=5) {
             GameBoardFragment gf = GameBoardFragment.newInstance(n1, n2);
-            //mFm.beginTransaction().add(gf,gamename).commit();
+           // mFm.beginTransaction().add(gf, "blah'").commit();
+          //  gf.getActivity().getSupportFragmentManager().beginTransaction().add(gf, "b").commit();
+
             mGames.add(gf);
             notifyDataSetChanged();
         }
@@ -59,9 +61,9 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
 
     public void deleteGame(GameBoardFragment gf) {
         //Fragment f = mFm.findFragmentByTag(gamename);
-        //mFm.beginTransaction().remove(f).commit();
+        //mFm.beginTransaction().remove(gf).commit();
+       // gf.getActivity().getSupportFragmentManager().beginTransaction().remove(gf).commit();
         mGames.remove(gf);
-    //    gf.getActivity().getSupportFragmentManager().beginTransaction().remove(gf).commit();
         notifyDataSetChanged();
     }
 
