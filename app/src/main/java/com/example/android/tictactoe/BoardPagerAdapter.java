@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -34,10 +35,10 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
 
    @Override
     public int getItemPosition(Object item) {
-        if (!mGames.contains(item)) {
+      //  if (!mGames.contains(item)) {
             return POSITION_NONE;
-        }
-        return mGames.indexOf(item);
+       // }
+    //    return mGames.indexOf(item);
     }
 
     @Override
@@ -53,6 +54,7 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
 
             mGames.add(gf);
             notifyDataSetChanged();
+            Log.v("id", "" + gf.getId());
         }
         else {//make toast
             Toast.makeText(mContext, "Too many games open... Can have 5 max.", Toast.LENGTH_LONG ).show();
@@ -63,6 +65,7 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
         //Fragment f = mFm.findFragmentByTag(gamename);
         //mFm.beginTransaction().remove(gf).commit();
        // gf.getActivity().getSupportFragmentManager().beginTransaction().remove(gf).commit();
+        //destroyItem(, getItemPosition(gf), gf);
         mGames.remove(gf);
         notifyDataSetChanged();
     }
