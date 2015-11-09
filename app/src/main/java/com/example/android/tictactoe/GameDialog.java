@@ -58,8 +58,9 @@ public class GameDialog extends DialogFragment {
         sameOpp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                d.dismiss();
                 mListener.onDialogSameGameClick(player1name, player2name);
+
+                d.dismiss();
             }
         });
 
@@ -67,8 +68,9 @@ public class GameDialog extends DialogFragment {
         diffOpp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                d.dismiss();
                 mListener.onDialogDiffGameClick();
+
+                d.dismiss();
             }
         });
 

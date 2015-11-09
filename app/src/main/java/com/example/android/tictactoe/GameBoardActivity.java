@@ -1,6 +1,7 @@
 package com.example.android.tictactoe;
 
 import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.FragmentActivity;
 
 
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.EditText;
 
 /**
  * Created by cayte on 10/21/15.
@@ -19,8 +21,7 @@ import android.view.View;
     //TODO - save screen shots of last 10 games?
 
 public class GameBoardActivity extends FragmentActivity implements GameDialog.NoticeDialogListener,
-        EnterNamesFrag.EnterNamesFragListener, GameBoardFragment.GameBoardFragListener,
-        EditStartButtonFrag.EditStartButtonFragListener{
+        EnterNamesDialog.EnterNamesFragListener, GameBoardFragment.GameBoardFragListener, EditNamesDialog.EditNamesDialogListener {
     FloatingActionButton mFab;
     BoardPagerAdapter mPagerAdapter;
     ViewPager mViewPager;
@@ -36,16 +37,20 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
         player1name = mIntent.getStringExtra(Constants.PLAYER1);
         player2name = mIntent.getStringExtra(Constants.PLAYER2);
 
-        //??? TODO - how do I add the editstart frag to this layout???
         // ViewPager and its adapters use support library fragments, so use getSupportFragmentManager.
-        mPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager()); //??? is there a better way to get player names into the frags?
+        mPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager(), player1name, player2name, this); //??? is there a better way to get player names into the frags?
+        
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setOffscreenPageLimit(10);
+
         mFab = (FloatingActionButton) findViewById(R.id.newgame);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPagerAdapter.addGame("test",player1name,player2name);
+                //does NOT add game
+                makeEnterNamesDialog();
+
             }
         });
     }
@@ -54,41 +59,35 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
 
     @Override
     public void onDialogSameGameClick(String player1name, String player2name){
-        finish();//??? how to destroy the current fragment?
-
-        //TODO: this is no longer starting a new activity, but rather creates a new fragment (and adds it to the ViewPager
+        mPagerAdapter.deleteGame(((GameBoardFragment)mPagerAdapter.getItem(mViewPager.getCurrentItem())));
        /** Intent mIntent = new Intent(getBaseContext(), GameBoardActivity.class);
         mIntent.putExtra(Constants.PLAYER1, player2name); //switch player sides
         mIntent.putExtra(Constants.PLAYER2, player1name);
         startActivity(mIntent);**/
 
-        Bundle mBundle = new Bundle();
+       /** Bundle mBundle = new Bundle();
         mBundle.putString(Constants.PLAYER1, player2name); //switch player sides
         mBundle.putString(Constants.PLAYER2, player1name);
+        mBundle.putString("fragName", "test");
 
         GameBoardFragment newGame = new GameBoardFragment();
-        newGame.setArguments(mBundle);
+        newGame.setArguments(mBundle);**/
+        mPagerAdapter.addGame(player2name, player1name);
+       // mViewPager.setCurrentItem(mPagerAdapter.getCount());
     }
 
     @Override
     public void onDialogDiffGameClick(){
-        finish();
-        //TODO: destroy fragment and go to EnterNamesFrag
-        //TODO: this is where we include a flag to EnterNamesFrag (new game vs. edit names)
+        mPagerAdapter.deleteGame(((GameBoardFragment)mPagerAdapter.getItem(mViewPager.getCurrentItem())));
+        makeEnterNamesDialog();
+        //destroy fragment and go to EnterNamesDialog
     }
 
-    @Override
-    public void startNewGameFrag(){
 
-    }
+
 
     @Override
-    public void returnToGameWithEditedNames(){
-
-    };
-
-    @Override
-    public void makeDialog (String whoWon, String player1name, String player2name){
+    public void makeGameOverDialog (String whoWon, String player1name, String player2name){
         //make dialog
         //set arguments to pass info into the dialog
         GameDialog gameEndDialog = new GameDialog();
@@ -103,13 +102,46 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
     }
 
     @Override
-    public void startNewGame(){
+    public void makeEnterNamesDialog(){ //from GameBoardFrag
         //start new game from within an ongoing game
-
+        //needs to bring up EnterNamesDialog
+        EnterNamesDialog newGameDialog = new EnterNamesDialog();
+        newGameDialog.show(this.getSupportFragmentManager(), "NewGame");
     };
 
     @Override
-    public void editNames(){
+    public void startNewGameFrag(String p1name, String p2name) { //from EnterNamesFrag
+        mPagerAdapter.addGame(p1name, p2name);
+       // mViewPager.setCurrentItem(mPagerAdapter.getCount());
+
+    }
+
+    @Override
+    public void makeEditNamesDialog(String oldP1name, String oldP2name){
+        //needs to have old player names show up
+        EditNamesDialog mEditNamesDialog = new EditNamesDialog();
+
+        //make dialog
+        //set arguments to pass info into the dialog
+        Bundle args = new Bundle();
+        args.putString("oldP1name", oldP1name);
+        args.putString("oldP2name", oldP2name);
+        mEditNamesDialog.setArguments(args);
+
+       // EditText p1 = (EditText) findViewById(R.id.play1name);//???how to deal with multiple ID's of the same name in different layout files
+      //  p1.setText(oldP1name);
+
+      //  EditText p2 = (EditText) findViewById(R.id.play2name);//???how to deal with multiple ID's of the same name in different layout files
+      //  p2.setText(oldP1name);
+
+        mEditNamesDialog.show(this.getSupportFragmentManager(), "EditNames");
+
+    }
+
+    @Override
+    public void resumeGame (String p1, String p2){
+        //TODO???how to update game
+        ((GameBoardFragment)mPagerAdapter.getItem(mViewPager.getCurrentItem())).updateName(p1, p2);
 
     };
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -30,7 +31,10 @@ public class GameBoardFragment extends Fragment {
 
     boolean isWinner = false;
     String whoWon = "";
-    int count;
+    int count = 0;
+
+    Button editNamesBtn;
+
 
     static GameBoardFragment newInstance(String p1, String p2) {     //???why static (tutorial said so, but can't set player names that way)? and in general???
         GameBoardFragment f = new GameBoardFragment();
@@ -48,6 +52,8 @@ public class GameBoardFragment extends Fragment {
 
     public void updateName(String name1, String name2) {
         //TODO:- assign and update the name.
+        player1.setText(name1);
+        player2.setText(name2);
     }
 
     @Override
@@ -83,6 +89,18 @@ public class GameBoardFragment extends Fragment {
             });
             myGrid.addView(myBtn);
         }
+
+
+
+        editNamesBtn = (Button) mView.findViewById(R.id.editNamesBtn);
+
+        editNamesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: add method implementation to gameboard activity
+                mListener.makeEditNamesDialog(player1name, player2name);
+            }
+        });
         return mView;
     }
 
@@ -162,7 +180,9 @@ public class GameBoardFragment extends Fragment {
         winContains(winCheckAD, wx, wo);
         if (count == 9 && !isWinner) {
             whoWon = "NO ONE won - It's a draw!";
-            mListener.makeDialog(whoWon, player1name, player2name);
+            mListener.makeGameOverDialog(whoWon, player1name, player2name);
+
+            //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
             isWinner = true;
         }
     }
@@ -202,7 +222,10 @@ public class GameBoardFragment extends Fragment {
             if (winX || winO) {
                 Toast.makeText(getActivity(), whoWon + "won", Toast.LENGTH_LONG).show(); //TODO: don't forget to get rid of this
                 Log.v("someone won", "winwin");
-                mListener.makeDialog(whoWon, player1name, player2name); //communicates to the GameBoardActivity Activity (tells it who won and has it make the dialog
+
+                mListener.makeGameOverDialog(whoWon, player1name, player2name);
+
+                //getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();//communicates to the GameBoardActivity Activity (tells it who won and has it make the dialog
                 for (int i = 0; i < 9; i++) {
                     SquareButton btn = (SquareButton) myGrid.getChildAt(i);
                     btn.setEnabled(false);
@@ -211,6 +234,7 @@ public class GameBoardFragment extends Fragment {
             }
         }
     }
+
 
     GameBoardFragListener mListener;
 
@@ -227,7 +251,9 @@ public class GameBoardFragment extends Fragment {
 
     public interface GameBoardFragListener {
         //TODO: define useful methods
-        void makeDialog(String s1, String s2, String s3);//??? is this reasonable?
+        void makeGameOverDialog(String s1, String s2, String s3);//??? is this reasonable?
+        void makeEnterNamesDialog();
+        void makeEditNamesDialog(String p1, String p2);
 
     }
 }

@@ -22,4 +22,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/player2name"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit Names"
+        android:id="@+id/editNamesBtn"/>
+
 </LinearLayout>
