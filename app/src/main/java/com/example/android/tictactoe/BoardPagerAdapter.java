@@ -22,7 +22,8 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
         mContext = c;
         mFm = fm;
         mGames = new ArrayList<GameBoardFragment>();
-        mGames.add(GameBoardFragment.newInstance(p1, p2)); //creates the first game with names from main activity
+       // mGames.add(GameBoardFragment.newInstance(p1, p2)); //creates the first game with names from main activity
+        addGame(p1, p2);
         //???should this use addGame method instead - that way it will have a name to use later for deletion purposes???
     }
 
@@ -31,17 +32,17 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
         return mGames.size();
     }
 
-   /* @Override
+   @Override
     public int getItemPosition(Object item) {
-        if (item == null) {
+        if (!mGames.contains(item)) {
             return POSITION_NONE;
         }
         return POSITION_UNCHANGED;
-    }*/
+    }
 
     @Override
     public Fragment getItem(int position) {
-        return mGames.get(position); //??? why a new one?
+        return mGames.get(position);
     }
 
     public void addGame(String n1, String n2) {
@@ -60,7 +61,7 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
         //Fragment f = mFm.findFragmentByTag(gamename);
         //mFm.beginTransaction().remove(f).commit();
         mGames.remove(gf);
-        //gf.getActivity().getSupportFragmentManager().beginTransaction().remove(gf).commit();
+    //    gf.getActivity().getSupportFragmentManager().beginTransaction().remove(gf).commit();
         notifyDataSetChanged();
     }
 

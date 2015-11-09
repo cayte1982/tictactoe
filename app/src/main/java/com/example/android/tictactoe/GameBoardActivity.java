@@ -39,7 +39,7 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
 
         // ViewPager and its adapters use support library fragments, so use getSupportFragmentManager.
         mPagerAdapter = new BoardPagerAdapter(getSupportFragmentManager(), player1name, player2name, this); //??? is there a better way to get player names into the frags?
-        
+
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(10);
@@ -73,7 +73,7 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
         GameBoardFragment newGame = new GameBoardFragment();
         newGame.setArguments(mBundle);**/
         mPagerAdapter.addGame(player2name, player1name);
-       // mViewPager.setCurrentItem(mPagerAdapter.getCount());
+        mViewPager.setCurrentItem(mPagerAdapter.getCount()-1);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
     @Override
     public void startNewGameFrag(String p1name, String p2name) { //from EnterNamesFrag
         mPagerAdapter.addGame(p1name, p2name);
-       // mViewPager.setCurrentItem(mPagerAdapter.getCount());
+        mViewPager.setCurrentItem(mPagerAdapter.getCount()-1);
 
     }
 
