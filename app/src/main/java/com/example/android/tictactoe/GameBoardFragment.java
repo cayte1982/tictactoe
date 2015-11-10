@@ -55,42 +55,6 @@ public class GameBoardFragment extends Fragment {
         return f;
     }
 
-    static public byte[] object2Bytes( Object o ) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream( baos );
-        oos.writeObject( o );
-        return baos.toByteArray();
-    }
-
-    static public Object bytes2Object( byte raw[] )
-            throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bais = new ByteArrayInputStream( raw );
-        ObjectInputStream ois = new ObjectInputStream( bais );
-        Object o = ois.readObject();
-        return o;
-    }
-
-    static GameBoardFragment newInstance(String p1, String p2, GridLayout mG) {     //???why static (tutorial said so, but can't set player names that way)? and in general???
-        GameBoardFragment f = new GameBoardFragment();
-
-        // Supply num input as an argument.
-
-        //???why am i doing this exactly? - so i can get the data in the OnCreateView
-        Bundle args = new Bundle();
-        args.putString(Constants.PLAYER1, p1);
-        args.putString(Constants.PLAYER2, p2);
-        try {
-            args.putByteArray("Obj_byte_array", object2Bytes(mG));
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-
-        }
-        f.setArguments(args);
-
-        return f;
-    }
 
     public void updateName(String name1, String name2) {
         //TODO:- assign and update the name.
@@ -103,7 +67,6 @@ public class GameBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.game_board_frag, container, false);  //???is this right?
 
-
         //??? not sure i understand how putting things in a bundle in the constructor works with me getting them here.
         player1name = getArguments().getString(Constants.PLAYER1);
         player2name = getArguments().getString(Constants.PLAYER2);
@@ -113,19 +76,6 @@ public class GameBoardFragment extends Fragment {
         player2 = (TextView) mView.findViewById(R.id.player2name);
         player2.setText(player2name);
 
-        if (getArguments().getByteArray("Obj_byte_array") != null) {
-            try {
-                myGrid = (GridLayout)bytes2Object(getArguments().getByteArray("Obj_byte_array"));
-
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        else {
         myGrid = (GridLayout) mView.findViewById(R.id.myGrid);
         for (int i = 1; i <= 9; i++) {
             final SquareButton myBtn = new SquareButton(getActivity());  //??? why final?
@@ -142,29 +92,40 @@ public class GameBoardFragment extends Fragment {
                 }
             });
             myGrid.addView(myBtn);
-        }}
-
-
-
+        }
 
         editNamesBtn = (Button) mView.findViewById(R.id.editNamesBtn);
-
         editNamesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: add method implementation to gameboard activity
                 mListener.makeEditNamesDialog(player1name, player2name);
             }
         });
         return mView;
     }
 
-    public GridLayout getGrid(){
-        return myGrid;
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        char[] savedStateArr = winCheckR.toCharArray();
+        for (int i = 0; i < savedStateArr.length; i++){
+            SquareButton sqBtn = (SquareButton) myGrid.getChildAt(i);
+            if (savedStateArr[i] == 'x'){
+                sqBtn.setImageResource(R.drawable.x);
+                sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
+                sqBtn.setTag("x");
+            }
+            if (savedStateArr[i] == 'o'){
+                sqBtn.setImageResource(R.drawable.o);
+                sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
+                sqBtn.setTag("o");
+            }
+        }
     }
-    public void setGrid (GridLayout grid){
-        myGrid = grid;
-    }
+
+
+
 
     private void makeMove (SquareButton sqBtn){
         if (!whoseMove) {
@@ -179,11 +140,10 @@ public class GameBoardFragment extends Fragment {
         sqBtn.setEnabled(false);
     }
 
-    /*
-    TODO:- put this into utils
-     */
+    String winCheckR = "";
+
     private void checkWin (){
-        String winCheckR = "";
+        winCheckR = "";
         String winCheckC = "";
         String winCheckD = "";
         String winCheckAD = "";
@@ -202,7 +162,6 @@ public class GameBoardFragment extends Fragment {
 
         int i = 0;
         while (i < 9) { //check columns  //???fugly - is there a better way?
-            Log.v("value of i is", Integer.toString(i));
             SquareButton btn = (SquareButton) myGrid.getChildAt(i);
             if (btn.getTag() != null) {
                 String xoro = btn.getTag().toString();
