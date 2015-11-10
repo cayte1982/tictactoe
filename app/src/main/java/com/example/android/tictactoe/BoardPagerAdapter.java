@@ -1,13 +1,20 @@
 package com.example.android.tictactoe;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.widget.GridLayout;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -33,17 +40,67 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
         return mGames.size();
     }
 
+    Bundle args;
    @Override
     public int getItemPosition(Object item) {
       //  if (!mGames.contains(item)) {
+      if (mGames.size() >0){
+       for (GameBoardFragment gf : mGames) {
+           GridLayout grid = gf.getGrid();
+           args = new Bundle();
+           try {
+               args.putByteArray("Obj_byte_array", object2Bytes(grid));
+
+           } catch (IOException e) {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+
+           }
+           ((GameBoardFragment) item).onSaveInstanceState(args);
+
+       }}
             return POSITION_NONE;
        // }
     //    return mGames.indexOf(item);
     }
 
+    static public byte[] object2Bytes( Object o ) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream( baos );
+        oos.writeObject( o );
+        return baos.toByteArray();
+    }
+
+    static public Object bytes2Object( byte raw[] )
+            throws IOException, ClassNotFoundException {
+        ByteArrayInputStream bais = new ByteArrayInputStream( raw );
+        ObjectInputStream ois = new ObjectInputStream( bais );
+        Object o = ois.readObject();
+        return o;
+    }
+
     @Override
     public Fragment getItem(int position) {
+        GridLayout grid = null;
+        if (mGames.size() >1){
+        for (GameBoardFragment gf : mGames){
+            try {
+                 grid = (GridLayout)bytes2Object(args.getByteArray("Obj_byte_array"));
+              //  gf.setGrid(grid);
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            GameBoardFragment.newInstance("bbb", "kkk", grid);
+
+        }}
+
         return mGames.get(position);
+
     }
 
     public void addGame(String n1, String n2) {

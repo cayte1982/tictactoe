@@ -13,6 +13,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +55,43 @@ public class GameBoardFragment extends Fragment {
         return f;
     }
 
+    static public byte[] object2Bytes( Object o ) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream( baos );
+        oos.writeObject( o );
+        return baos.toByteArray();
+    }
+
+    static public Object bytes2Object( byte raw[] )
+            throws IOException, ClassNotFoundException {
+        ByteArrayInputStream bais = new ByteArrayInputStream( raw );
+        ObjectInputStream ois = new ObjectInputStream( bais );
+        Object o = ois.readObject();
+        return o;
+    }
+
+    static GameBoardFragment newInstance(String p1, String p2, GridLayout mG) {     //???why static (tutorial said so, but can't set player names that way)? and in general???
+        GameBoardFragment f = new GameBoardFragment();
+
+        // Supply num input as an argument.
+
+        //???why am i doing this exactly? - so i can get the data in the OnCreateView
+        Bundle args = new Bundle();
+        args.putString(Constants.PLAYER1, p1);
+        args.putString(Constants.PLAYER2, p2);
+        try {
+            args.putByteArray("Obj_byte_array", object2Bytes(mG));
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+        }
+        f.setArguments(args);
+
+        return f;
+    }
+
     public void updateName(String name1, String name2) {
         //TODO:- assign and update the name.
         player1.setText(name1);
@@ -61,7 +103,6 @@ public class GameBoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View mView = inflater.inflate(R.layout.game_board_frag, container, false);  //???is this right?
 
-        //TODO: don't forget to put things in a BUNDLE in the base activity
 
         //??? not sure i understand how putting things in a bundle in the constructor works with me getting them here.
         player1name = getArguments().getString(Constants.PLAYER1);
@@ -72,6 +113,19 @@ public class GameBoardFragment extends Fragment {
         player2 = (TextView) mView.findViewById(R.id.player2name);
         player2.setText(player2name);
 
+        if (getArguments().getByteArray("Obj_byte_array") != null) {
+            try {
+                myGrid = (GridLayout)bytes2Object(getArguments().getByteArray("Obj_byte_array"));
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        else {
         myGrid = (GridLayout) mView.findViewById(R.id.myGrid);
         for (int i = 1; i <= 9; i++) {
             final SquareButton myBtn = new SquareButton(getActivity());  //??? why final?
@@ -88,7 +142,8 @@ public class GameBoardFragment extends Fragment {
                 }
             });
             myGrid.addView(myBtn);
-        }
+        }}
+
 
 
 
@@ -102,6 +157,13 @@ public class GameBoardFragment extends Fragment {
             }
         });
         return mView;
+    }
+
+    public GridLayout getGrid(){
+        return myGrid;
+    }
+    public void setGrid (GridLayout grid){
+        myGrid = grid;
     }
 
     private void makeMove (SquareButton sqBtn){
