@@ -31,6 +31,18 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
+
+
+
+
+
+
+
+
+
         setContentView(R.layout.activity_game_board);
 
         Intent mIntent = getIntent();

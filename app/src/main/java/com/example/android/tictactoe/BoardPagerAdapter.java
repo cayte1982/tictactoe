@@ -81,5 +81,10 @@ public class BoardPagerAdapter extends FragmentStatePagerAdapter {
         notifyDataSetChanged();
     }
 
+    @Override
+    public CharSequence getPageTitle (int position) {
+        return "Game " + (position + 1);
+    }
+
 
 }

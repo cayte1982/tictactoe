@@ -1,8 +1,10 @@
 package com.example.android.tictactoe;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,15 +59,46 @@ public class GameBoardFragment extends Fragment {
 
 
     public void updateName(String name1, String name2) {
-        //TODO:- assign and update the name.
         player1.setText(name1);
         player2.setText(name2);
+        player1name = name1;
+        player2name = name2;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle b) {
         View mView = inflater.inflate(R.layout.game_board_frag, container, false);  //???is this right?
+
+
+        Log.v(player1name + " onView ", "y");
+        if (b != null) {
+            Log.v("bundle in onView is ", b.toString());
+
+            String ss = getArguments().getString("savedState");
+            if (ss != null){
+                char[] savedStateArr = ss.toCharArray();
+                for (int i = 0; i < savedStateArr.length; i++) {
+                    SquareButton sqBtn = (SquareButton) myGrid.getChildAt(i);
+                    if (savedStateArr[i] == 'x') {
+                        sqBtn.setImageResource(R.drawable.x);
+                        sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
+                        sqBtn.setTag("x");
+                        sqBtn.setEnabled(false);
+                    }
+                    if (savedStateArr[i] == 'o') {
+                        sqBtn.setImageResource(R.drawable.o);
+                        sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
+                        sqBtn.setTag("o");
+                        sqBtn.setEnabled(false);
+
+                    }
+                }}
+        }
+
+
+
+
 
         //??? not sure i understand how putting things in a bundle in the constructor works with me getting them here.
         player1name = getArguments().getString(Constants.PLAYER1);
@@ -107,7 +140,7 @@ public class GameBoardFragment extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-
+        Log.v("wincheckR is ", winCheckR);
         char[] savedStateArr = winCheckR.toCharArray();
         for (int i = 0; i < savedStateArr.length; i++){
             SquareButton sqBtn = (SquareButton) myGrid.getChildAt(i);
@@ -115,15 +148,54 @@ public class GameBoardFragment extends Fragment {
                 sqBtn.setImageResource(R.drawable.x);
                 sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
                 sqBtn.setTag("x");
+                sqBtn.setEnabled(false);
             }
             if (savedStateArr[i] == 'o'){
                 sqBtn.setImageResource(R.drawable.o);
                 sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
                 sqBtn.setTag("o");
+                sqBtn.setEnabled(false);
+
             }
         }
     }
 
+    @Override
+    public void onCreate(Bundle b) {
+        super.onCreate(b);
+        Log.v(player1name + " onCreate", "y");
+        if (b != null) {
+            Log.v("bundle in onVreate is ", b.toString());
+
+            String ss = getArguments().getString("savedState");
+            if (ss != null){
+            char[] savedStateArr = ss.toCharArray();
+            for (int i = 0; i < savedStateArr.length; i++) {
+                SquareButton sqBtn = (SquareButton) myGrid.getChildAt(i);
+                if (savedStateArr[i] == 'x') {
+                    sqBtn.setImageResource(R.drawable.x);
+                    sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
+                    sqBtn.setTag("x");
+                    sqBtn.setEnabled(false);
+                }
+                if (savedStateArr[i] == 'o') {
+                    sqBtn.setImageResource(R.drawable.o);
+                    sqBtn.setScaleType(ImageButton.ScaleType.FIT_XY);
+                    sqBtn.setTag("o");
+                    sqBtn.setEnabled(false);
+
+                }
+            }}
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState (Bundle b){
+        super.onSaveInstanceState(b);
+        Log.v(player1name + " onsaveinsst wincheck: ", winCheckR);
+        b.putString("savedState", winCheckR);
+        Log.v(player1name +" onsaveinsst b is", b.toString());
+    }
 
 
 
@@ -260,12 +332,12 @@ public class GameBoardFragment extends Fragment {
     GameBoardFragListener mListener;
 
     @Override
-    public void onAttach(Activity activity) {   //http://developer.android.com/training/basics/fragments/communicating.html
-        super.onAttach(activity);
+    public void onAttach(Context context) {   //http://developer.android.com/training/basics/fragments/communicating.html
+        super.onAttach(context);
         try {
-            mListener = (GameBoardFragListener) activity;
+            mListener = (GameBoardFragListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(context.toString()
                     + " must implement EnterNamesFragListener");
         }
     }
