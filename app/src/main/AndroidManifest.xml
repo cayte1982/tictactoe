@@ -10,14 +10,17 @@
         android:theme="@style/AppTheme"
         android:name=".TicTacToe11">
         <activity android:name=".MainActivity"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameBoardActivity">
+        <activity android:name=".GameBoardActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop">
 
         </activity>
     </application>

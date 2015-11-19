@@ -2,46 +2,46 @@
 <items version="2" >
 
     <item
-        jar="/home/cayte/tictactoe/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
-        <dex dex="/home/cayte/tictactoe/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-dd13b17ee794ecc7020438228c335bc3f70b598b.jar" />
-    </item>
-    <item
-        jar="/home/cayte/tictactoe/app/build/intermediates/exploded-aar/com.android.support/design/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
-        <dex dex="/home/cayte/tictactoe/app/build/intermediates/pre-dexed/debug/classes-46208628f35e0a3bae2416fb82a6f242bfe6da77.jar" />
-    </item>
-    <item
-        jar="/home/cayte/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
-        <dex dex="/home/cayte/tictactoe/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-246b876bc9953a5e46c2a553596134be7ccb4ad8.jar" />
-    </item>
-    <item
-        jar="/home/cayte/tictactoe/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
-        <dex dex="/home/cayte/tictactoe/app/build/intermediates/pre-dexed/debug/classes-2feea13310b9a348a5ea56094afb878d2e7f58ec.jar" />
-    </item>
-    <item
-        jar="/home/cayte/tictactoe/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
-        <dex dex="/home/cayte/tictactoe/app/build/intermediates/pre-dexed/debug/classes-ae29c363f45e2cd33360150ced4e157d9b22cc79.jar" />
-    </item>
-    <item
-        jar="/home/cayte/tictactoe/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars/classes.jar"
+        jar="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
-        <dex dex="/home/cayte/tictactoe/app/build/intermediates/pre-dexed/debug/classes-02d2a5be5b9927c1b0e9ba3f114fcd59c741793e.jar" />
+        <dex dex="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/pre-dexed/debug/classes-726d381ccce4ba1f33501d4227dd6422effb08e0.jar" />
+    </item>
+    <item
+        jar="/Users/ssrinivasan/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.1.0/support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/pre-dexed/debug/support-annotations-23.1.0-879e819fafbf7874034781de4202e0010f63164a.jar" />
+    </item>
+    <item
+        jar="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/pre-dexed/debug/internal_impl-23.1.0-11c69e005eb037dac9f7d7a1b695f475d3455853.jar" />
+    </item>
+    <item
+        jar="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/pre-dexed/debug/classes-f0798a0830915c8b0141b1f82f511db05e34ce8f.jar" />
+    </item>
+    <item
+        jar="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/exploded-aar/com.android.support/design/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
+        <dex dex="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/pre-dexed/debug/classes-cf09df26ef4bb36ed44c435f829c0512809a339b.jar" />
+    </item>
+    <item
+        jar="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
+        <dex dex="/Users/ssrinivasan/StudioProjects/tictactoe/app/build/intermediates/pre-dexed/debug/classes-d25e303efe6239bcf20c78d97e7f3212e2bd40e8.jar" />
     </item>
 
 </items>

@@ -1,16 +1,12 @@
 package com.example.android.tictactoe;
 
-import android.support.design.widget.FloatingActionButton;
-
-import android.support.v4.app.FragmentActivity;
-
-
-
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.EditText;
 
 /**
  * Created by cayte on 10/21/15.
@@ -30,16 +26,6 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -156,6 +142,11 @@ public class GameBoardActivity extends FragmentActivity implements GameDialog.No
         ((GameBoardFragment)mPagerAdapter.getItem(mViewPager.getCurrentItem())).updateName(p1, p2);
 
     };
+
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
+    }
 
 
 
